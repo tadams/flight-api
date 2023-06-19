@@ -1,0 +1,22 @@
+@startuml
+!theme cerulean-outline
+skinparam backgroundColor #F2F3F4
+hide footbox
+skinparam ParticipantPadding 20
+skinparam BoxPadding 20
+
+title REST API using Command Pattern
+Client -> Controller: GET /flight-summary
+Controller -> Command: New
+participant CommandInvoker #yellow
+Controller -> CommandInvoker: run(command)
+CommandInvoker -> Command: execute
+Command -> Service: findFlightSummary
+Service -> Repository: findFlightSummary
+
+group Cross Cutting Concerns
+CommandInvoker -> CommandInvoker: log
+CommandInvoker -> Service: updateFlightCost
+Service -> Repository: updateFlightCost
+end
+@enduml
