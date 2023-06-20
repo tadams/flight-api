@@ -23,9 +23,7 @@ public class FlightSummaryRepository {
                   new FlightSummary(List.of("UA", "AA"), "DFW", "FLL", 0, 2, 45, new BigDecimal("125.00")),
                   new FlightSummary(List.of("UA", "AA", "DL"), "SFO", "FLL", 0, 4, 15, new BigDecimal("575.00")),
                   new FlightSummary(List.of("UA", "AA", "WN"), "DFW", "IAH", 0, 0, 55, new BigDecimal("85.00")))
-              .forEach(flightSummary -> {
-                    this.flightData.put(flightSummary.getRoute(), flightSummary);
-                });
+              .forEach(flightSummary -> this.flightData.put(flightSummary.getRoute(), flightSummary));
     }
 
     public Optional<FlightSummary> findFlights(String route) {

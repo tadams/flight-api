@@ -42,10 +42,7 @@ public class FlightSummaryController {
         FlightSummaryFindCommand command = new FlightSummaryFindCommand(flightSummaryService, origin, destination);
         invoker.run(command);
 
-        if (command.flightSummary().isPresent()) {
-            return ResponseEntity.ok(command.flightSummary().get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return command.flightSummary().map(ResponseEntity::ok)
+                      .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

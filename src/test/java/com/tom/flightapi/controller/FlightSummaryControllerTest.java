@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tom.flightapi.FlightApiApplication;
 import com.tom.flightapi.model.FlightSummary;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,14 +37,15 @@ class FlightSummaryControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void given() {
+    void given() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
-    @Test
-    public void shouldFindFlightSummary() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/flight-summary", "/flight-summary/cmd"})
+    void shouldFindFlightSummary(String url) throws Exception {
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/flight-summary")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(url)
                                                                  .queryParam("origin", "IAH")
                                                                  .queryParam("destination", "FLL"))
                                   .andExpect(status().isOk())
@@ -55,8 +57,9 @@ class FlightSummaryControllerTest {
         assertThat(flightSummary.getRoute()).isEqualTo("IAHFLL");
     }
 
-    @Test
-    public void shouldNotFindFlightSummary() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"/flight-summary", "/flight-summary/cmd"})
+    void shouldNotFindFlightSummary() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/flight-summary")
                                               .queryParam("origin", "ORD")

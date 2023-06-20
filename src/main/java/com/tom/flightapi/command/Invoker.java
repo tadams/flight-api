@@ -21,12 +21,12 @@ public class Invoker {
     }
 
     private void logCommand(Command command) {
-        logger.info(command.toJson());
+        if (logger.isInfoEnabled()) {
+            logger.info(command.toJson());
+        }
     }
 
     private void increaseRouteCost(Command command) {
-        if (command.getRoute().isPresent()) {
-            flightSummaryService.updateFlightCost(command.getRoute().get());
-        }
+        command.getRoute().ifPresent(route -> flightSummaryService.updateFlightCost(route));
     }
 }
